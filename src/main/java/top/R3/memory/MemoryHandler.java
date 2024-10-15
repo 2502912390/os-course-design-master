@@ -18,24 +18,26 @@ public class MemoryHandler {
     @Resource
     private IndexController indexController;
     
-    // 内存表，记录每个内存块的占用状态
+    // 内存表，记录每个内存块的占用状态，键为内存块编号，值为是否被占用
     public Map<Integer,Boolean> memoryTable = new HashMap<>(100);
 
     /**
      * 改变内存块的状态（申请或释放）
-     * @param type 操作类型："apply" 或 "free"
+     * @param type 操作类型："apply" 表示申请，"free" 表示释放
      * @param is 要操作的内存块列表
      */
     private void change(String type, List<Integer> is){
         ObservableList<FlowPane> memories = indexController.memories;
         for(Integer i : is){
-            int x = i/20;
-            int y = i%20;
+            int x = i/20;  // 计算行索引
+            int y = i%20;  // 计算列索引
             if("apply".equals(type)){
+                // 申请内存时，将对应的UI元素设置为红色，并在内存表中标记为已占用
                 memories.get(x).getChildren().get(y).setStyle("-fx-fill: #f25555");
                 memoryTable.put(i,true);
             }
             else if("free".equals(type)){
+                // 释放内存时，将对应的UI元素设置为蓝色，并从内存表中移除
                 memories.get(x).getChildren().get(y).setStyle("-fx-fill: #1e90ff");
                 memoryTable.remove(i);
             }
@@ -47,8 +49,10 @@ public class MemoryHandler {
      * @param memory 要申请的内存对象
      */
     public void apply(Memory memory){
+        // 将内存对象添加到MemoryContainer中
         MemoryContainer.getMap().put(memory.getPid(), memory);
         List<Integer> memoryList = memory.getMemoryList();
+        // 更新内存状态为已申请
         change("apply",memoryList);
     }
 
@@ -57,8 +61,10 @@ public class MemoryHandler {
      * @param pid 要释放内存的进程ID
      */
     public void free(Integer pid){
+        // 从MemoryContainer中移除对应的内存对象
         Memory memory = MemoryContainer.getMap().remove(pid);
         List<Integer> memoryList = memory.getMemoryList();
+        // 更新内存状态为已释放
         change("free",memoryList);
     }
 
@@ -71,17 +77,22 @@ public class MemoryHandler {
         ObservableList<FlowPane> memories = indexController.memories;
         for(int i=0;i<100;i++){
             if(memoryTable.get(i)==null||!memoryTable.get(i)){
+                // 如果内存块未被占用
                 int x = i/20;
                 int y = i%20;
                 memories.get(x).getChildren().get(y);
+                // 将该内存块添加到内存对象的列表中
                 memory.getMemoryList().add(i);
                 if(memory.getMemoryList().size()==memory.getMemorySize()){
+                    // 如果已找到足够的内存块，结束搜索
                     break;
                 }
             }else{
+                // 如果遇到已占用的内存块，清空已收集的内存块列表，重新开始搜索
                 memory.getMemoryList().clear();
             }
         }
+        // 返回是否成功找到足够的内存块
         return memory.getMemoryList().size() == memory.getMemorySize();
     }
 }

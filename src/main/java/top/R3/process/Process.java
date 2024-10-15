@@ -4,34 +4,34 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import top.R3.device.Device;
 
 /**
- * @Author lemon
- * @Date 2022/10/7 9:24
- * @Version 1.0
+ * Process 类表示一个进程
  */
-/*
- * */
 @Data
 public class Process {
-    private PCB pcb;
-    private IntegerProperty id = new SimpleIntegerProperty();
-    private IntegerProperty totalRunTime = new SimpleIntegerProperty();
-    private StringProperty ocupyingDeviceType = new SimpleStringProperty();//占用的设备
-    private StringProperty status = new SimpleStringProperty();
-    private IntegerProperty committedTime = new SimpleIntegerProperty();
-    private IntegerProperty continueTime = new SimpleIntegerProperty();//持续时间
-    private IntegerProperty finalTime = new SimpleIntegerProperty();
-    private Device device;
+    private PCB pcb;                                                    // 进程控制块
+    private IntegerProperty id = new SimpleIntegerProperty();           // 进程ID
+    private IntegerProperty totalRunTime = new SimpleIntegerProperty(); // 总运行时间
+    private StringProperty ocupyingDeviceType = new SimpleStringProperty(); // 占用的设备类型
+    private StringProperty status = new SimpleStringProperty();         // 进程状态
+    private IntegerProperty committedTime = new SimpleIntegerProperty();// 提交时间
+    private IntegerProperty continueTime = new SimpleIntegerProperty(); // 持续时间
+    private IntegerProperty finalTime = new SimpleIntegerProperty();    // 结束时间
+    private Device device;                                              // 关联的设备
 
+    /**
+     * 默认构造函数
+     */
     public Process() {
     }
 
+    /**
+     * 使用PCB构造Process对象
+     * @param pcb 进程控制块
+     */
     public Process(PCB pcb) {
         this.pcb = pcb;
         id.set(pcb.getPid());
@@ -43,6 +43,8 @@ public class Process {
         finalTime.set(pcb.getFinalTime());
     }
 
+    // 以下是各个属性的getter方法
+
     public PCB getPcb() {
         return pcb;
     }
@@ -50,7 +52,6 @@ public class Process {
     public Integer getId() {
         return id.get();
     }
-
 
     public int getTotalRunTime() {
         return totalRunTime.get();
@@ -75,6 +76,8 @@ public class Process {
     public int getFinalTime() {
         return finalTime.get();
     }
+
+    // 以下是一些属性的setter方法
 
     public void setStatus(String status) {
         this.status.set(status);

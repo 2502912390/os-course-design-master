@@ -3,14 +3,7 @@ package top.R3.process;
 import javafx.beans.property.*;
 import lombok.Data;
 
-/**
- * @Author lemon
- * @Date 2022/10/7 8:49
- * @Version 1.0
- */
-/*
-*
-* */
+
 @Data
 public class PCB {
     private Integer pid; //进程id
