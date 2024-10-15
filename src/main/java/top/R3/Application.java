@@ -9,26 +9,34 @@ import top.R3.splash.MainSplash;
 import top.R3.view.IndexView;
 
 /**
- * *使用Spring Boot框架的JavaFX应用程序
- * 这个是主函数，更换第二个参数可以改变主界面
- *
- * */
+ * 这是应用程序的主类，它继承自AbstractJavaFxApplicationSupport，
+ * 这个类是一个用于集成Spring Boot和JavaFX的支持类。
+ */
 @SpringBootApplication(scanBasePackages = "top.R3")
 public class Application extends AbstractJavaFxApplicationSupport {
+
+    /**
+     * 应用程序的入口点
+     * @param args 命令行参数
+     */
     public static void main(String[] args) {
-        // 使用Spring Boot支持启动JavaFX应用程序
-        /**
-         * R3Application.class: 表示要启动的 JavaFX 应用程序的主类，即当前的 R3Application 类。
-         * IndexView.class: 表示应用程序的主界面类。在这里，IndexView 类被指定为主界面。
-         * new MainSplash(): 创建了一个新的 MainSplash 对象，这可能是应用程序启动时显示的启动画面或者欢迎界面。
-         * args: 是命令行参数，这是 main 方法接受的参数，可以通过命令行传递给应用程序。**/
-        Application.launch(Application.class, IndexView.class,new MainSplash(),args);
+        // 启动JavaFX应用程序
+        // Application.class: 当前类，作为主应用程序类
+        // IndexView.class: 主视图类
+        // new MainSplash(): 创建一个新的启动画面
+        // args: 命令行参数
+        Application.launch(Application.class, IndexView.class, new MainSplash(), args);
     }
+
+    /**
+     * 在显示初始视图之前配置主舞台（主窗口）
+     * @param stage JavaFX的主舞台
+     * @param ctx Spring的应用程序上下文
+     */
     @Override
     public void beforeInitialView(Stage stage, ConfigurableApplicationContext ctx) {
-        // 在显示初始视图之前配置主舞台
-        stage.setTitle("菜单"); // 设置舞台标题为"菜单"
-        stage.setWidth(1500); // 将舞台宽度设置为1300像素
-        stage.setHeight(900); // 将舞台高度设置为900像素
+        stage.setTitle("菜单"); // 设置窗口标题
+        stage.setWidth(1500);   // 设置窗口宽度
+        stage.setHeight(900);   // 设置窗口高度
     }
 }

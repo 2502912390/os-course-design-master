@@ -11,16 +11,21 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Author lemon
- * @Date 2022/10/24 10:11
- * @Version 1.0
+ * MemoryHandler 类负责处理内存相关的操作
  */
 @Component
 public class MemoryHandler {
     @Resource
     private IndexController indexController;
-    public Map<Integer,Boolean> memoryTable = new HashMap<>(100);//内存表，占用的内存id ----> 是否被占用
+    
+    // 内存表，记录每个内存块的占用状态
+    public Map<Integer,Boolean> memoryTable = new HashMap<>(100);
 
+    /**
+     * 改变内存块的状态（申请或释放）
+     * @param type 操作类型："apply" 或 "free"
+     * @param is 要操作的内存块列表
+     */
     private void change(String type, List<Integer> is){
         ObservableList<FlowPane> memories = indexController.memories;
         for(Integer i : is){
@@ -33,22 +38,35 @@ public class MemoryHandler {
             else if("free".equals(type)){
                 memories.get(x).getChildren().get(y).setStyle("-fx-fill: #1e90ff");
                 memoryTable.remove(i);
-
             }
         }
     }
+
+    /**
+     * 申请内存
+     * @param memory 要申请的内存对象
+     */
     public void apply(Memory memory){
         MemoryContainer.getMap().put(memory.getPid(), memory);
         List<Integer> memoryList = memory.getMemoryList();
         change("apply",memoryList);
     }
+
+    /**
+     * 释放内存
+     * @param pid 要释放内存的进程ID
+     */
     public void free(Integer pid){
         Memory memory = MemoryContainer.getMap().remove(pid);
         List<Integer> memoryList = memory.getMemoryList();
-
         change("free",memoryList);
     }
-    //查找并预分配
+
+    /**
+     * 查找并预分配空闲内存
+     * @param memory 要分配的内存对象
+     * @return 是否成功找到并预分配了足够的内存
+     */
     public synchronized boolean findFreeMemory(Memory memory){
         ObservableList<FlowPane> memories = indexController.memories;
         for(int i=0;i<100;i++){
