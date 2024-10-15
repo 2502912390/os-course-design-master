@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="top.R3.controller.CreateProcessController">
+   <children>
+      <TextField id="2" fx:id="totalRunTime" layoutX="231.0" layoutY="120.0" promptText="整数类型" />
+      <Button layoutX="189.0" layoutY="180.0" mnemonicParsing="false" onMouseClicked="#create" text="创建" />
+      <Label layoutX="80.0" layoutY="80.0" text="请输入运行所需设备:" />
+      <Label layoutX="90.0" layoutY="125.0" text="请输入总运行时间:" />
+      <Button fx:id="cancel" layoutX="300.0" layoutY="180.0" mnemonicParsing="false" onMouseClicked="#cancel" text="取消" />
+      <ChoiceBox fx:id="deviceType" layoutX="231.0" layoutY="76.0" prefHeight="23.0" prefWidth="161.0" />
+   </children>
+</AnchorPane>
