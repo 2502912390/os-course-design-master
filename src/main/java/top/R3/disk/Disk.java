@@ -17,7 +17,7 @@ public class Disk {
      * @param id 磁盘块的唯一标识符
      * @param num 磁盘块编号
      */
-    public Disk(Integer id, Integer num) {
+    public Disk(Integer id, Integer num) {//num会根据排序规则而改变
         this.id = id;
         this.num = new SimpleIntegerProperty(num);
         this.next = new SimpleIntegerProperty();

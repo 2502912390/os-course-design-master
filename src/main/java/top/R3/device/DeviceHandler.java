@@ -61,8 +61,9 @@ public class DeviceHandler {
      * 绑定TableView的列与Device对象的属性
      */
     public void bindProperties(TableView<Device> tv, TableColumn<Device, IntegerProperty> ocupyDev, TableColumn<Device, StringProperty> type) {
-        ocupyDev.setCellValueFactory(new PropertyValueFactory<>("ocupyPID"));
+        ocupyDev.setCellValueFactory(new PropertyValueFactory<>("ocupyPID"));//？？？
         type.setCellValueFactory(new PropertyValueFactory<>("type"));
+
         tv.setItems(deviceList);
         this.tv = tv;
     }
