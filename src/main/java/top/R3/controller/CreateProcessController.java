@@ -1,4 +1,5 @@
 package top.R3.controller;
+
 // 导入必要的类
 import de.felixroske.jfxsupport.FXMLController;
 import javafx.collections.FXCollections;
@@ -27,14 +28,14 @@ public class CreateProcessController {
     private Stage stage;                  // 当前窗口
     public Button cancel;                 // 取消按钮
 
-    // 注入IndexController
+    // 注入IndexController，用于与主界面交互
     @Resource
     private IndexController indexController;
     
     // 设备类型列表
     ObservableList<String> list = FXCollections.observableArrayList("A", "B", "C");
 
-    // 创建进程方法
+    // 创建进程方法，当用户点击创建按钮时调用
     @FXML
     public void create(MouseEvent mouseEvent) {
         // 获取选择的设备类型
@@ -50,14 +51,14 @@ public class CreateProcessController {
         stage.close();
     }
 
-    // 取消操作方法
+    // 取消操作方法，当用户点击取消按钮时调用
     @FXML
     public void cancel(MouseEvent mouseEvent) {
         // 关闭当前窗口
         stage.close();
     }
 
-    // 初始化方法
+    // 初始化方法，在FXML加载后自动调用
     public void initialize(){
         // 设置设备类型选择框的选项
         deviceType.setItems(list);

@@ -122,7 +122,7 @@ public class ProcessHandler {
     }
 
     /**
-     * 获取一个需要指定类型设备的阻塞进程
+     * 获取一个指定类型设备的阻塞进程
      */
     public Process getWaitProcess(ObservableList<Process> waitTable, String type) {
         for (Process process : waitTable) {
