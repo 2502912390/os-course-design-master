@@ -61,7 +61,7 @@ public class IndexController {
     public Button restart;//重置
 
     @FXML
-    public Label time;
+    public Label time;//显示的时间
     @FXML
     private TreeView<String> treeView;
 
@@ -128,13 +128,13 @@ public class IndexController {
     @FXML
     public TableColumn<Device,IntegerProperty> deviceOccupyPid;
     
-    private  Integer timeNum = 0;
-    //运行的东西
+    private  Integer timeNum = 0;//操作系统运行的（当前）时间
+
     private final Timeline timeline = new Timeline();
-    public Integer auto_add_pid = 1;
-    // cpu运行时间
-    private Integer cpuTime = 0;
-    private Integer cTime = 4;
+    public Integer auto_add_pid = 1;//自动创建的进程id
+
+    private Integer cpuTime = 0;// cpu运行时间
+    private Integer cTime = 4;//时间片
     
     //磁盘区域
     @FXML
@@ -149,11 +149,11 @@ public class IndexController {
     
     //内存模块
     @FXML
-    public AnchorPane memoryBox;
-    //TODO:进度条
+    public AnchorPane memoryBox;//子模块为FlowPane
+
     @FXML
     public ProgressBar memoryBar;
-    public ObservableList<FlowPane> memories = FXCollections.observableArrayList();
+    public ObservableList<FlowPane> memories = FXCollections.observableArrayList();//内存的存储空间的图形化
     public Text memoryText;
     @Resource
     private MemoryHandler memoryHandler;
@@ -175,11 +175,11 @@ public class IndexController {
         hashMap.put("\\C\\demo3.e","");
         hashMap.put("\\C\\demo4.e","");
         hashMap.put("\\C\\demo5.e","");
-        C.getChildren().addAll(mt1,mt2,mt3,mt4,mt5);
+        C.getChildren().addAll(mt1,mt2,mt3,mt4,mt5);//作为其子节点
 
         root.getChildren().addAll(C);
         console.setText("欢迎使用");
-        memoryBar.setProgress(0.05);
+        memoryBar.setProgress(0.05);// 设置进度条为 5%
 
         // 设置CPU时间片选项
         cpuTimeChoiceBox.setItems(FXCollections.observableArrayList(4, 6, 8));
@@ -207,7 +207,7 @@ public class IndexController {
         ObservableList<Node> children = memoryBox.getChildren();
         for(Node node : children){
             if(node instanceof FlowPane)
-                memories.add((FlowPane) node);
+                memories.add((FlowPane)node);
         }
         
         // 内存分配测试
@@ -231,7 +231,7 @@ public class IndexController {
             if(timeNum%2==0){
                 Random random = new Random();
                 int i = random.nextInt(3);
-                createProcess(++auto_add_pid,str.charAt(i)+"",random.nextInt(7)+2);
+                createProcess( ++auto_add_pid,str.charAt(i)+"",random.nextInt(7)+2 );
             }
             
             // 刷新所有队列显示
@@ -255,9 +255,9 @@ public class IndexController {
     private void cpu() {
         // 如果执行队列为空，从就绪队列调度进程
         if(executeQueue.getItems().size()==0){
-            if(readyQueue.getItems().size()==0) return ;
+            if(readyQueue.getItems().size()==0) return ;//执行和就绪队列都没有 则结束cpu调度
             Process process = this.readyQueue.getItems().get(0);
-            processHandler.moveProcessFromReadyToExecute(process,readyTable,exeTable);
+            processHandler.moveProcessFromReadyToExecute(process,readyTable,exeTable);//就绪-》执行
         }
         
         // 获取当前执行的进程
@@ -283,25 +283,26 @@ public class IndexController {
             memoryHandler.free(process.getId());
 
             // 尝试唤醒等待队列中的进程
-            Process waitProcess = processHandler.getWaitProcess(waitTable,type);
+            Process waitProcess = processHandler.getWaitProcess(waitTable,type);//释放设备之后可以唤醒阻塞的进程
             if(waitProcess !=null){
                 Device device = deviceHandler.ocupyDevice(waitProcess.getOcupyingDeviceType(), waitProcess.getId());
                 if(device!=null){
                     waitProcess.setDevice(device);
-                    processHandler.moveProcessFromWaitToReady(waitProcess,waitTable,readyTable);
+                    processHandler.moveProcessFromWaitToReady(waitProcess,waitTable,readyTable);//阻塞-》就绪
                 }
             }
-            cpuTime = 0;
+
+            cpuTime = 0;//完成任务之后 运行时间归0
         }
         
         // 更新内存使用情况显示
-        int size = memoryHandler.memoryTable.size();
+        int size = memoryHandler.memoryTable.size();//不对吧？ 可能是有编号 但是没被占用？？？
         log.info("内存{}",size);
         memoryText.setText(String.valueOf(size)+"%");
         memoryBar.setProgress(size/100.0);
         
-        // 时间片轮转
-        if(cpuTime >= cTime){
+
+        if(cpuTime >= cTime){// 时间片轮转 大于时间片 当前进程进入就绪状态
             processHandler.moveProcessFromExecuteToReady(process,exeTable,readyTable);
             cpuTime = 0;
         }
@@ -318,7 +319,7 @@ public class IndexController {
         PCB pcb = new PCBBuilder()
                 .pid(pid)
                 .ocupyingDeviceType(type)
-                .status("阻塞")
+                .status("阻塞")//创建初为阻塞态
                 .committedTime(timeNum)
                 .continueTime(0)
                 .totalRunTime(totalTime)
@@ -338,7 +339,7 @@ public class IndexController {
 
         // 尝试分配设备
         Device device = deviceHandler.ocupyDevice(type, pid);
-        if(device!=null){
+        if(device!=null){//分配设备成功 则是就绪 否则是等待
             process.setStatus("就绪态");
             processHandler.addItemInList(readyTable,process);
             process.setDevice(device);
@@ -365,17 +366,17 @@ public class IndexController {
      * 处理用户输入的命令
      */
     String[] order={"create","delete","rmdir","copy","mkdir","deldir","read","write"};
-    Map<String, String> hashMap = new HashMap<>();
+    Map<String, String> hashMap = new HashMap<>();//存放树形结构的文件
     public void cmd(KeyEvent keyEvent) {
         // 检查是否按下Enter键
         if(keyEvent.getCode().getName().equalsIgnoreCase("enter")){
             String input=command.getText();
-            input=input.replaceAll("\\n","");
-            long spaceCount = input.chars().filter(Character::isWhitespace).count();
-            String[] str=input.split("\\\\");
+            input = input.replaceAll("\\n","");//删除换行符
+            long spaceCount = input.chars().filter(Character::isWhitespace).count();//统计空白字符的个数
+            String[] str=input.split("\\\\");//分割
             command.clear();
-            int index=-1;
-            
+
+            int index=-1;//对应命令的下标
             // 识别命令类型
             for(int i=0;i<order.length;i++){
                 if(str[0].trim().equals(order[i])){
@@ -464,7 +465,7 @@ public class IndexController {
                         }
                     }
                     break;
-                case 6:
+                case 6://不用
                     // 读取文件内容
                     String[] str4=input.split(" ");
                     String str5=str4[str4.length-1];
@@ -494,7 +495,7 @@ public class IndexController {
                         console.setText(console.getText()+"\n该文件不存在");
                     }
                     break;
-                case 7:
+                case 7://不用
                     // 写入文件内容
                     String[] str3=input.split(" ");
                     String str2=str3[str3.length-1];

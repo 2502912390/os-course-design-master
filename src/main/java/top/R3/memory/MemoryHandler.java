@@ -24,16 +24,16 @@ public class MemoryHandler {
     /**
      * 改变内存块的状态（申请或释放）
      * @param type 操作类型："apply" 表示申请，"free" 表示释放
-     * @param is 要操作的内存块列表
+     * @param mems 要操作的内存块列表
      */
-    private void change(String type, List<Integer> is){
+    private void change(String type, List<Integer> mems){
         ObservableList<FlowPane> memories = indexController.memories;
-        for(Integer i : is){
+        for(Integer i : mems){
             int x = i/20;  // 计算行索引
             int y = i%20;  // 计算列索引
             if("apply".equals(type)){
                 // 申请内存时，将对应的UI元素设置为红色，并在内存表中标记为已占用
-                memories.get(x).getChildren().get(y).setStyle("-fx-fill: #f25555");
+                memories.get(x).getChildren().get(y).setStyle("-fx-fill: #f25555");//FlowPane对应地方设置为红色
                 memoryTable.put(i,true);
             }
             else if("free".equals(type)){
@@ -75,24 +75,27 @@ public class MemoryHandler {
      */
     public synchronized boolean findFreeMemory(Memory memory){
         ObservableList<FlowPane> memories = indexController.memories;
-        for(int i=0;i<100;i++){
+        boolean Findfree = false;
+        for(int i=0;i<100;i++){//遍历所有内存块
             if(memoryTable.get(i)==null||!memoryTable.get(i)){
                 // 如果内存块未被占用
-                int x = i/20;
-                int y = i%20;
-                memories.get(x).getChildren().get(y);
+                int x = i/20;//行索引
+                int y = i%20;//列索引
+                memories.get(x).getChildren().get(y);//不进行设置？？？
+
                 // 将该内存块添加到内存对象的列表中
                 memory.getMemoryList().add(i);
                 if(memory.getMemoryList().size()==memory.getMemorySize()){
                     // 如果已找到足够的内存块，结束搜索
+                    Findfree=true;
                     break;
                 }
-            }else{
+            }else{//保证内存块的连续性？
                 // 如果遇到已占用的内存块，清空已收集的内存块列表，重新开始搜索
                 memory.getMemoryList().clear();
             }
         }
         // 返回是否成功找到足够的内存块
-        return memory.getMemoryList().size() == memory.getMemorySize();
+        return Findfree;
     }
 }

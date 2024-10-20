@@ -42,7 +42,7 @@ public class DeviceHandler {
      * @return 分配的设备，如果没有可用设备则返回null
      */
     public Device ocupyDevice(String type, int pid) {
-        for (Device device : deviceList) {
+        for (Device device : deviceList) {//遍历设备列表
             if (!device.isOcupied() && device.getType().equals(type)) {
                 device.setOcupyPID(pid);
                 device.setOcupied(true);
@@ -61,7 +61,7 @@ public class DeviceHandler {
      * 绑定TableView的列与Device对象的属性
      */
     public void bindProperties(TableView<Device> tv, TableColumn<Device, IntegerProperty> ocupyDev, TableColumn<Device, StringProperty> type) {
-        ocupyDev.setCellValueFactory(new PropertyValueFactory<>("ocupyPID"));//？？？
+        ocupyDev.setCellValueFactory(new PropertyValueFactory<>("ocupyPID"));
         type.setCellValueFactory(new PropertyValueFactory<>("type"));
 
         tv.setItems(deviceList);

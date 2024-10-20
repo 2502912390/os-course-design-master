@@ -63,5 +63,4 @@ public class CreateProcessController {
         // 设置设备类型选择框的选项
         deviceType.setItems(list);
     }
-
 }

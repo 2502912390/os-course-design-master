@@ -8,7 +8,7 @@ import java.util.List;
 // 使用Lombok的@Data注解自动生成getter、setter、equals、hashCode和toString方法
 @Data
 public class Memory {
-    private Integer pid;        // 对应进程的ID
+    private Integer pid;        // 申请内存的进程的ID
     private Integer memorySize; // 内存大小
     private List<Integer> memoryList; // 存储占用的内存块列表
 

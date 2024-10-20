@@ -250,7 +250,7 @@
                </children>
             </AnchorPane>
             <ProgressBar fx:id="memoryBar" layoutX="50.0" layoutY="15.0" prefHeight="40.0" prefWidth="335.0" progress="0.0" />
-            <Text fx:id="memoryText" layoutX="218.0" layoutY="76.0" strokeType="OUTSIDE" strokeWidth="0.0" text="5%" />
+            <Text fx:id="memoryText" layoutX="240.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="5%" />
          </children>
       </AnchorPane>
       <Text layoutX="830.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="目录树" wrappingWidth="50.00000727176666" />
