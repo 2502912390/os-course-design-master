@@ -13,5 +13,6 @@ public class PCB {
         private Integer committedTime ; //提交时间
         private Integer continueTime ;//持续时间
         private Integer finalTime ; //最终时间
+        //添加阻塞原因
         public PCB() { }
 }

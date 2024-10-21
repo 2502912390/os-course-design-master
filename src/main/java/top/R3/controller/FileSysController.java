@@ -63,8 +63,8 @@ public class FileSysController {
         diskList.get(2).setNext(255);
 
         // 设置第2和第3个矩形(索引1和2)的颜色为红色，表示已占用
-        rectList.get(1).setStyle("-fx-fill: #ff1111;");
-        rectList.get(2).setStyle("-fx-fill: #ff1111;");
+        rectList.get(1).setStyle("-fx-fill: #1eff31;");
+        rectList.get(2).setStyle("-fx-fill: #1eff31;");
     }
 
     // 查找空闲磁盘块的方法

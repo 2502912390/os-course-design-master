@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 /**
  * Disk 类表示磁盘的一个块
  * 使用 JavaFX 的属性来支持 UI 绑定
+ * 每个disk要有64字节
  */
 public class Disk {
     private Integer id;  // 磁盘块的唯一标识符

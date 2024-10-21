@@ -165,6 +165,7 @@ public class IndexController {
         treeView.setRoot(root);
         MyTreeItem C = new MyTreeItem(true,"C",2);
 
+        //至少要包含 5 个目录和 15 个文件。
         MyTreeItem mt1 =new MyTreeItem(false,"demo1.e",1);
         MyTreeItem mt2 =new MyTreeItem(false,"demo2.e",1);
         MyTreeItem mt3 =new MyTreeItem(false,"demo3.e",1);
@@ -174,7 +175,7 @@ public class IndexController {
         hashMap.put("\\C\\demo2.e","");
         hashMap.put("\\C\\demo3.e","");
         hashMap.put("\\C\\demo4.e","");
-        hashMap.put("\\C\\demo5.e","");
+        hashMap.put("\\C\\demo5.e","");//没有占用磁盘？？？
         C.getChildren().addAll(mt1,mt2,mt3,mt4,mt5);//作为其子节点
 
         root.getChildren().addAll(C);
@@ -251,8 +252,9 @@ public class IndexController {
      * 处理进程的执行、完成和时间片轮转
      */
     String str = "ABC";
-    boolean isRun = true;
-    private void cpu() {
+
+    //重写 进程创建 撤销 阻塞 唤醒
+    private void cpu() {//时间片要为5
         // 如果执行队列为空，从就绪队列调度进程
         if(executeQueue.getItems().size()==0){
             if(readyQueue.getItems().size()==0) return ;//执行和就绪队列都没有 则结束cpu调度

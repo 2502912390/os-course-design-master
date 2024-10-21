@@ -26,13 +26,13 @@ public class DeviceHandler {
         // 添加一些模拟的设备
         deviceList.addAll(
                 new Device("A"),
-                new Device("A"),
+//                new Device("A"),
                 new Device("B"),
                 new Device("B"),
-                new Device("B"),
-                new Device("C"),
+//                new Device("B"),
                 new Device("C"),
                 new Device("C"));
+//                new Device("C"));
     }
 
     /**
