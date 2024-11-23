@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="top.R3.controller.CreateProcessController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="top.ComFive.controller.CreateProcessController">
    <children>
       <TextField id="2" fx:id="totalRunTime" layoutX="231.0" layoutY="120.0" promptText="整数类型" />
       <Button layoutX="189.0" layoutY="180.0" mnemonicParsing="false" onMouseClicked="#create" text="创建" />

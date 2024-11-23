@@ -1,0 +1,190 @@
+public void cmd(KeyEvent keyEvent) {
+        // 检查是否按下Enter键
+        if(keyEvent.getCode().getName().equalsIgnoreCase("enter")){
+            String original_input=command.getText();
+            original_input = original_input.replaceAll("\\n","");//删除换行符
+
+            long spaceCount = original_input.chars().filter(Character::isWhitespace).count();//统计空白字符的个数
+
+            String[] instruction_patch=original_input.split("\\\\");//分割各个部分
+            command.clear();
+
+            int index=-1;//对应命令的下标
+            // 识别命令类型
+            for(int i=0;i<order.length;i++){
+                if(instruction_patch[0].trim().equals(order[i])){
+                    index=i;
+                    break;
+                }
+            }
+            
+            int strLen= instruction_patch.length;
+            if(strLen<=1){
+                console.setText(console.getText()+"\n请输入正确的路径1");
+                return;
+            }
+            
+            // 根据命令类型执行相应操作
+            switch (index){
+                case 0:
+                    // 创建文件
+                    String[] str13=original_input.split(" ");
+                    String str14=str13[str13.length-1];//获取文件名字
+                    hashMap.put(str14,"");
+                    cmdCreate(instruction_patch,1,false);
+                    break;
+                case 1:
+                    // 删除文件
+                    cmdDelete(instruction_patch,1);
+                    String[] str7=original_input.split(" ");
+
+                    String str8=str7[str7.length-1];//取文件名
+                    hashMap.remove(str8);
+                    break;
+                case 2:
+                    // 删除空目录
+                    MyTreeItem parentmt=fileSysHandler.checkFile(root,instruction_patch,1);
+                    int fileSize=parentmt.getChildren().size();
+                    for(int i=0;i<fileSize;i++){
+                        MyTreeItem mt = (MyTreeItem) parentmt.getChildren().get(i);
+                        if(mt.getFileName().equals(instruction_patch[strLen-1])){
+                            if(mt.getChildren().size()==0){
+                                cmdDelete(instruction_patch,2);
+                            }
+                            else console.setText(console.getText()+"\n目录不为空！");
+                        }
+                    }
+                    break;
+                case 3:
+                    // 复制文件
+                    if(spaceCount==1) {
+                        String newstr = new String();
+                        String[] str50=original_input.split(" ");
+                        String str51=str50[str50.length-1]; //旧
+                        newstr += instruction_patch[0] + "\\";
+                        newstr += instruction_patch[strLen-1];
+                        String str40="\\"+instruction_patch[strLen-1];
+                        System.out.println(str40);
+                        instruction_patch = newstr.split("\\\\");
+                        hashMap.put(str40,hashMap.get(str51));
+                        cmdCreate(instruction_patch, 1, false);
+                    }
+                    if (spaceCount==2) {
+                        String newstr = new String();
+                        String[] str30=original_input.split(" ");
+                        String str31=str30[str30.length-1]; //旧
+                        String str32=str30[str30.length-2]; //新
+                        newstr += instruction_patch[0];
+                        newstr+=str32;
+                        newstr+="\\";
+                        newstr+=instruction_patch[strLen-1];
+                        instruction_patch = newstr.split("\\\\");
+                        hashMap.put(str32,hashMap.get(str31));
+                        cmdCreate(instruction_patch, 1, false);
+                    }
+                    break;
+                case 4:
+                    // 创建目录
+                    cmdCreate(instruction_patch,2,true);
+                    break;
+                case 5:
+                    // 删除目录（包括非空目录）
+                    String[] str11=original_input.split(" ");
+                    String str12=str11[str11.length-1];
+                    cmdDelete(instruction_patch,2);
+                    Set<String> set=hashMap.keySet();
+                    for(String s:set){
+                        if(s.contains(str12)){
+                            hashMap.remove(s);
+                        }
+                    }
+                    break;
+                case 6://不用
+                    // 读取文件内容
+                    String[] str4=original_input.split(" ");
+                    String str5=str4[str4.length-1];
+                    if(hashMap.containsKey(str5)){
+                        String readstr=hashMap.get(str5);
+                        Stage primaryStage=new Stage();
+                        primaryStage.setWidth(400);
+                        primaryStage.setHeight(335);
+                        primaryStage.setTitle("写字板");
+
+                        TextArea textarea = new TextArea();
+                        textarea.setPrefWidth(400);
+                        textarea.setPrefHeight(330);
+                        textarea.setWrapText(true);
+                        textarea.setEditable(false);
+                        textarea.setText(readstr);
+
+                        VBox layout = new VBox();
+                        layout.setPrefWidth(400);
+                        layout.setPrefHeight(330);
+                        layout.getChildren().add(textarea);
+
+                        Scene scene = new Scene(layout);
+                        primaryStage.setScene(scene);
+                        primaryStage.show();
+                    }else{
+                        console.setText(console.getText()+"\n该文件不存在");
+                    }
+                    break;
+                case 7://不用
+                    // 写入文件内容
+                    String[] str3=original_input.split(" ");
+                    String str2=str3[str3.length-1];
+                    if(hashMap.containsKey(str2)){
+                        Stage primaryStage1=new Stage();
+                        primaryStage1.setTitle("写字板");
+                        primaryStage1.setWidth(400);
+                        primaryStage1.setHeight(335);
+
+                        TextArea textArea1 = new TextArea();
+                        textArea1.setPrefWidth(400);
+                        textArea1.setPrefHeight(300);
+                        textArea1.setWrapText(true);
+                        String userInput="";
+                        Button saveButton1 = new Button("保存");
+                        saveButton1.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent event) {
+                                String u=textArea1.getText();
+                                hashMap.put(str2,u);
+                                primaryStage1.close();
+                            }
+                        });
+                        Button saveButton3 = new Button("取消");
+                        saveButton3.setOnAction(new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent event) {
+                                String u="";
+                                hashMap.put(str2,u);
+                                primaryStage1.close();
+                            }
+                        });
+
+                        VBox vbox1=new VBox(5);
+
+                        VBox layout5 = new VBox();
+                        layout5.setPrefWidth(400);
+                        layout5.setPrefHeight(300);
+                        layout5.getChildren().add(textArea1);
+
+                        HBox layout6 = new HBox(304);
+                        layout6.setPrefWidth(400);
+                        layout6.setPrefHeight(30);
+                        layout6.getChildren().addAll(saveButton1,saveButton3);
+                        vbox1.getChildren().addAll(layout5,layout6);
+
+                        Scene scene1 = new Scene(vbox1);
+                        primaryStage1.setScene(scene1);
+                        primaryStage1.show();
+                    }else{
+                        console.setText(console.getText()+"\n该文件不存在");
+                    }
+                    break;
+                default:
+                    console.setText(console.getText()+"\n输入错误");
+            }
+        }
+    }
