@@ -64,7 +64,7 @@
             <VBox prefHeight="260.0" prefWidth="199.0">
                <children>
                   <TextField fx:id="command" onKeyPressed="#cmd" />
-                  <Button mnemonicParsing="false" onMouseClicked="#toMemory" prefHeight="30.0" prefWidth="212.0" text="查看内存分配" />
+                  <Button mnemonicParsing="false" onMouseClicked="#toMemory" prefHeight="30.0" prefWidth="212.0" text="查看磁盘分配" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" " />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text=" 终端" wrappingWidth="80.0" />
                   <TextArea id="command" fx:id="console" editable="false" prefHeight="191.0" prefWidth="199.0" />
