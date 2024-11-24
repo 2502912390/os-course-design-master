@@ -23,7 +23,7 @@ public class FileSysHandler {
 
     // 查找对应的node强制转换为 Rectangle 并返回
     private Rectangle lookupById(Integer fid){
-        Node lookup = fileSysController.getRectBox().lookup("#rect" + fid);
+        Node lookup = fileSysController.getRectBox().lookup("#rect" + fid);//在可视化的rect中找对应的
         if(lookup==null){
             log.error("索引不在范围内");
             return null;
@@ -33,23 +33,23 @@ public class FileSysHandler {
 
     @Resource
     private IndexController indexController;
-    //变色方法
+    //根据磁盘下标 改变颜色
     public void changeColor(Integer fid,String appOrfree){
         if("apply".equals(appOrfree)){
             lookupById(fid).setStyle("-fx-fill: #1eff31;");
         }else if("free".equals(appOrfree)){
-            lookupById(fid).setStyle("-fx-fill: #1eff31;");
+            lookupById(fid).setStyle("-fx-fill: #00a4fd;");
         }
     }
 
-    //更新表格，传入编号num的下一块索引next就行  next255表示占用？
-    public void updateDiskTable(Integer num,Integer next){//num要修改的磁盘 next下一块指向的磁盘
-        fileSysController.getDiskList().get(num).setNext(next);
+    //设置Disk_id磁盘的下一块指向
+    public void updateDiskTable(Integer Disk_id,Integer next){
+        fileSysController.getDiskList().get(Disk_id).setNext(next);
         fileSysController.getDiskTable().refresh();
     }
 
     //创建一个新的文件或文件夹，并将其添加到父节点的子节点列表中
-    public void creatFileOrDir(MyTreeItem parent,MyTreeItem children){
+    public void creatFileOrDir(MyTreeItem parent,MyTreeItem children){//要看哪里调用了
         int fileSize=parent.getChildren().size();
 
         for(int i=0;i<fileSize;i++){
@@ -59,26 +59,32 @@ public class FileSysHandler {
                 return;
             }
         }
+
         parent.getChildren().add(children);
         indexController.console.setText(indexController.console.getText()+"\n创建完成");
 
         //为文件的各个块分配磁盘空间，并在磁盘表中标记这些块为使用中
         int[] t=children.getDistNumber(); //获取文件的编号
-        t[t[0]]=255;//最后一块设置为255
-        int diskLen=fileSysController.diskList.size();
+        t[t[0]+1]=255;//最后一块设置为255
+
+        System.out.println("t[0]: "+t[0]);//1
+        System.out.println(java.util.Arrays.toString(t));//[1, 255, 0, 0, 0, 0]
+
+        int diskLen=fileSysController.diskList.size();//总的磁盘数
         int diskIndex=3;
 
-        for(int i=1;i<t[0];i++){
-            while (fileSysController.diskList.get(diskIndex).getNext()!=0&&diskIndex<diskLen){
+        for(int i=1;i<=t[0];i++){
+            while (fileSysController.diskList.get(diskIndex).getNext()!=0&&diskIndex<diskLen){//从第三块开始遍历 找到空磁盘的下标
                 diskIndex++;
             }
             t[i]=diskIndex++;
         }
 
         //遍历所有分配的块 更新磁盘表和文件的颜色标识
-        for(int i=2;i<=t[0];i++){
-            updateDiskTable(t[i-1],255);
-            changeColor(t[i-1],"apply");
+        for(int i=1;i<=t[0];i++){
+            System.out.println("*****"+t[i]);
+            updateDiskTable(t[i],255);
+            changeColor(t[i],"apply");
         }
     }
 
@@ -109,11 +115,13 @@ public class FileSysHandler {
             if(mt.getFileName().equals(str)){
                 if(mt.getDistNumber()[0]==type){//检查文件名和磁盘类型
                     root.getChildren().remove(i); //在树中删除
+
                     int[] t=mt.getDistNumber();//改文件占用的磁盘下标
-                    for(int j=1;j<t[0];j++){//更新磁盘表
+                    for(int j=1;j<t[0]+1;j++){//更新磁盘表
                         updateDiskTable(t[j],0);
                         changeColor(t[j],"free");
                     }
+
                     //删除该目录下的所有文件
                     deleteFile(mt);
                     indexController.console.setText(indexController.console.getText()+"\n删除成功");
@@ -136,7 +144,7 @@ public class FileSysHandler {
                 MyTreeItem mt=(MyTreeItem) root.getChildren().get(i);
                 //释放磁盘块
                 int[] t=mt.getDistNumber();
-                for(int j=1;j<t[0];j++){
+                for(int j=1;j<t[0]+1;j++){
                     updateDiskTable(t[j],0);
                     changeColor(t[j],"free");
                 }

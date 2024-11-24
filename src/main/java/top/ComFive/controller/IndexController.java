@@ -300,8 +300,7 @@ public class IndexController {
             Timming=true;
 
             if(random){
-                System.out.println("random");
-                if(timeNum%5==0){
+                if(timeNum%3==0){
                     Random random = new Random();
                     int i = random.nextInt(3);
                     createProcess( ++auto_add_pid,str.charAt(i)+"",random.nextInt(7)+2 );
@@ -699,7 +698,9 @@ public class IndexController {
         if(parentmt == null){
             console.setText(console.getText()+"\n父路径不正确，请重新输入");
         }
-        else fileSysHandler.creatFileOrDir(parentmt, mt);
+        else {
+            fileSysHandler.creatFileOrDir(parentmt, mt);
+        }
     }
 
     /**

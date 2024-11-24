@@ -17,7 +17,7 @@ public class MyTreeItem extends TreeItem<String> implements Serializable {
     // 文件名
     private String filename;
     // 文件编号数组
-    private int[] distNumber;//文件所占用的对应的磁盘下标
+    private int[] distNumber;//文件所占用的对应的磁盘下标  0号为改文件的长度 最后一号设置为255
 
     // 构造函数
     public MyTreeItem(boolean isDir, String str, int len){//len用来区分是文件/文件夹
@@ -29,7 +29,7 @@ public class MyTreeItem extends TreeItem<String> implements Serializable {
         this.filename = str;
 
         // 初始化文件编号数组 存储对应的磁盘下标
-        this.distNumber = new int[6]; // 注：这里固定为6，根据实际需求调整
+        this.distNumber = new int[6];
         // 设置数组的第一个元素为len，可能用于记录数组的有效长度
         this.distNumber[0] = len;
     }

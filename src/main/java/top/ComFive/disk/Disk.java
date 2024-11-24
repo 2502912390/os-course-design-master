@@ -8,10 +8,11 @@ import javafx.beans.property.SimpleIntegerProperty;
  * 使用 JavaFX 的属性来支持 UI 绑定
  * 每个disk要有64字节
  */
+//id和num有什么区别？
 public class Disk {
     private Integer id;  // 磁盘块的唯一标识符
     private IntegerProperty num;  // 磁盘（矩形块）编号
-    private IntegerProperty next;  // 磁盘指向，-1为结束，0表示空磁盘
+    private IntegerProperty next;  // 磁盘指向，255表示占用，0表示空磁盘
 
     /**
      * 构造函数

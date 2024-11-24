@@ -32,21 +32,19 @@ public class FileSysController {
     @FXML
     public ObservableList<Disk> diskList = FXCollections.observableArrayList();
 
-    // 磁盘信息表格
+    // 文件分配表
     public TableView<Disk> diskTable;
     public TableColumn<Disk, IntegerProperty> num;  // 盘号列
     public TableColumn<Disk, IntegerProperty> next; // 索引列（指向下一个磁盘块）
-
-    // 注入文件系统处理器
-    @Resource
-    private FileSysHandler fileSysHandler;
 
     // 初始化方法，在FXML加载后自动调用
     public void initialize(){
         // 给每个矩形块(代表磁盘块)命名id,并创建对应的Disk对象
         ObservableList<Node> rectList = rectBox.getChildren();
+
         for(int i=0; i<rectList.size(); i++){
-            rectList.get(i).setId("rect"+String.valueOf(i));
+            rectList.get(i).setId("rect"+String.valueOf(i));//为每一个可视化的rect设置一个id
+
             diskList.add(new Disk(i,i));
         }
 
@@ -57,12 +55,13 @@ public class FileSysController {
         // 将diskList设置为表格的数据源
         diskTable.setItems(diskList);
 
-        // 设置前三个磁盘块为已占用状态（255表示结束）
+        // 设置前三个磁盘块为已占用状态
         diskList.get(0).setNext(255);
         diskList.get(1).setNext(255);
         diskList.get(2).setNext(255);
 
-        // 设置第2和第3个矩形(索引1和2)的颜色为红色，表示已占用
+        // 设置第2和第3个矩形(索引1和2)的颜色为绿色，表示已占用
+        rectList.get(0).setStyle("-fx-fill: #1eff31;");
         rectList.get(1).setStyle("-fx-fill: #1eff31;");
         rectList.get(2).setStyle("-fx-fill: #1eff31;");
     }
