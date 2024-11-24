@@ -134,8 +134,10 @@ public class IndexController {
     public Integer auto_add_pid = 1;//自动创建的进程id
 
     private Integer cpuTime = 0;// cpu运行时间
-    private Integer cTime = 4;//时间片
-    
+    private Integer cTime = 5;//时间片
+
+    private boolean isRun = false;
+
     //磁盘区域
     @FXML
     private TextField command;//命令输入窗口
@@ -248,7 +250,7 @@ public class IndexController {
         memoryBar.setProgress(0.05);// 设置内存进度条为 5%
 
         // 设置CPU时间片选项
-        cpuTimeChoiceBox.setItems(FXCollections.observableArrayList(4, 6, 8));
+        cpuTimeChoiceBox.setItems(FXCollections.observableArrayList(4, 5, 6, 7));//添加几种时间片选择
         
         // 绑定进程表格列与进程属性
         processHandler.bindProperties(readyPid, readyTotalTimeCol, readyDev, readyStatus, readyCommitTime, readyContinueTime, readyFinishedTime);
@@ -267,7 +269,7 @@ public class IndexController {
         
         // 设置时间线
         timeline.setCycleCount(Integer.MAX_VALUE);
-        timeline.getKeyFrames().addAll(clockRun());
+//
         
         // 初始化内存显示
         ObservableList<Node> children = memoryBox.getChildren();
@@ -282,24 +284,38 @@ public class IndexController {
         memoryHandler.apply(memory);
     }
 
+    private KeyFrame clockRun() {
+        // 调用有参数的方法，传入默认值
+        return clockRun("default");
+    }
+
     /** 
      * 时钟帧每秒执行一次
      * 返回一个KeyFrame对象，定义了每秒执行的操作
      */
-    private KeyFrame clockRun(){
+    private KeyFrame clockRun(String parts){
         return new KeyFrame(Duration.seconds(1),"clock",event->{
             // 更新时间和CPU时间
             timeNum++;
             cpuTime++;
             time.setText(timeNum+"");
-            
-            // 每两秒创建一个新进程
-            if(timeNum%2==0){
-                Random random = new Random();
-                int i = random.nextInt(3);
-                createProcess( ++auto_add_pid,str.charAt(i)+"",random.nextInt(7)+2 );
+
+            if(parts.equals("default")){
+                System.out.println("default");
+                // 每两秒创建一个新进程 TODO 在运行文件的时候调用/就绪队列为空的时候调用
+                if(timeNum%2==0){
+                    Random random = new Random();
+                    int i = random.nextInt(3);
+                    createProcess( ++auto_add_pid,str.charAt(i)+"",random.nextInt(7)+2 );
+                }
+            }else{//运行脚本
+                System.out.println("NONONE....");
+                if(!isRun){
+                    createProcess(++auto_add_pid,parts.charAt(1)+"",parts.charAt(2)-'0');
+                    isRun=true;
+                }
             }
-            
+
             // 刷新所有队列显示
             readyQueue.refresh();
             executeQueue.refresh();
@@ -432,7 +448,8 @@ public class IndexController {
      * 处理用户输入的命令
      */
     //别的地方是否还有用到？
-    String[] command_set={"create","delete","rmdir","copy","mkdir","deldir","read","write"};
+    String[] command_set={"create","delete","rmdir","copy","mkdir","deldir","type","write","run"};
+    //将磁盘占用操作与hashMap绑定？
     Map<String, String> hashMap = new HashMap<>();//文件名 文件内容
     public void cmd(KeyEvent keyEvent) {
         // 检查是否按下Enter键
@@ -462,7 +479,7 @@ public class IndexController {
             String file_path=instructionAndpath[instructionAndpath.length-1];
             String file_name=instruction_patch[instruction_patch_num-1];
 
-//            System.out.println(java.util.Arrays.toString(instruction_path));//[create, \C\test2.e]
+//            System.out.println(java.util.Arrays.toString(instructionAndpath));//[create, \C\test2.e]
 //            System.out.println(java.util.Arrays.toString(instruction_patch));//[create , C, test2.e]
 
             // 根据命令类型执行相应操作
@@ -529,12 +546,10 @@ public class IndexController {
                 }
                 case 5:{
                     // 删除目录（包括非空目录）
-                    String[] str11=original_input.split(" ");
-                    String str12=str11[str11.length-1];
                     cmdDelete(instruction_patch,2);
                     Set<String> set=hashMap.keySet();
                     for(String s:set){
-                        if(s.contains(str12)){
+                        if(s.contains(file_path)){
                             hashMap.remove(s);
                         }
                     }
@@ -542,21 +557,20 @@ public class IndexController {
                 }
                 case 6:{
                     // 读取文件内容
-                    String[] str4=original_input.split(" ");
-                    String str5=str4[str4.length-1];
-                    if(hashMap.containsKey(str5)){
-                        String readstr=hashMap.get(str5);
+                    if(hashMap.containsKey(file_path)){//map中读取并且展示
+                        String content=hashMap.get(file_path);
+
                         Stage primaryStage=new Stage();
                         primaryStage.setWidth(400);
                         primaryStage.setHeight(335);
-                        primaryStage.setTitle("写字板");
+                        primaryStage.setTitle(file_path);
 
                         TextArea textarea = new TextArea();
                         textarea.setPrefWidth(400);
                         textarea.setPrefHeight(330);
                         textarea.setWrapText(true);
                         textarea.setEditable(false);
-                        textarea.setText(readstr);
+                        textarea.setText(content);//显示文字
 
                         VBox layout = new VBox();
                         layout.setPrefWidth(400);
@@ -573,35 +587,33 @@ public class IndexController {
                 }
                 case 7:{
                     // 写入文件内容
-                    String[] str3=original_input.split(" ");
-                    String str2=str3[str3.length-1];
-                    if(hashMap.containsKey(str2)){
-                        Stage primaryStage1=new Stage();
-                        primaryStage1.setTitle("写字板");
-                        primaryStage1.setWidth(400);
-                        primaryStage1.setHeight(335);
+                    if(hashMap.containsKey(file_path)){
+                        Stage primaryStage=new Stage();
+                        primaryStage.setTitle("请输入...");
+                        primaryStage.setWidth(400);
+                        primaryStage.setHeight(335);
 
-                        TextArea textArea1 = new TextArea();
-                        textArea1.setPrefWidth(400);
-                        textArea1.setPrefHeight(300);
-                        textArea1.setWrapText(true);
-                        String userInput="";
-                        Button saveButton1 = new Button("保存");
-                        saveButton1.setOnAction(new EventHandler<ActionEvent>() {
+                        TextArea textArea = new TextArea();
+                        textArea.setPrefWidth(400);
+                        textArea.setPrefHeight(300);
+                        textArea.setWrapText(true);
+
+                        Button saveButton = new Button("保存");
+                        saveButton.setOnAction(new EventHandler<ActionEvent>() {
                             @Override
                             public void handle(ActionEvent event) {
-                                String u=textArea1.getText();
-                                hashMap.put(str2,u);
-                                primaryStage1.close();
+                                String u = textArea.getText();
+                                hashMap.put(file_path,u);
+                                primaryStage.close();
                             }
                         });
-                        Button saveButton3 = new Button("取消");
-                        saveButton3.setOnAction(new EventHandler<ActionEvent>() {
+                        Button cancelButton = new Button("取消");
+                        cancelButton.setOnAction(new EventHandler<ActionEvent>() {
                             @Override
                             public void handle(ActionEvent event) {
                                 String u="";
-                                hashMap.put(str2,u);
-                                primaryStage1.close();
+                                hashMap.put(file_path,u);
+                                primaryStage.close();
                             }
                         });
 
@@ -609,21 +621,69 @@ public class IndexController {
 
                         VBox layout5 = new VBox();
                         layout5.setPrefWidth(400);
-                        layout5.setPrefHeight(300);
-                        layout5.getChildren().add(textArea1);
+                        layout5.setPrefHeight(250);
+                        layout5.getChildren().add(textArea);
 
-                        HBox layout6 = new HBox(304);
+                        HBox layout6 = new HBox(25);
                         layout6.setPrefWidth(400);
                         layout6.setPrefHeight(30);
-                        layout6.getChildren().addAll(saveButton1,saveButton3);
+                        layout6.getChildren().addAll(saveButton,cancelButton);
+
                         vbox1.getChildren().addAll(layout5,layout6);
 
                         Scene scene1 = new Scene(vbox1);
-                        primaryStage1.setScene(scene1);
-                        primaryStage1.show();
+                        primaryStage.setScene(scene1);
+                        primaryStage.show();
                     }else{
                         console.setText(console.getText()+"\n该文件不存在");
                     }
+                    break;
+                }
+                case 8:{
+                    //运行文件
+                    String content=hashMap.get(file_path);
+
+                    // 去除换行符
+                    String processed = content.replace("\n", "").replace("\r", "");
+                    // 按分号分隔字符串
+                    String[] parts = processed.split(";");
+
+                    Map<String, Integer> variables = new HashMap<>(); // 存储变量及其值
+                    for (String part : parts) {
+                        part = part.trim(); // 去除多余空格
+                        if (part.equals("end")) {
+                            break; // 遇到end停止处理
+                        }
+
+                        if(part.startsWith("!")){//调用对应的设备
+                            timeline.getKeyFrames().addAll(clockRun(part));
+                            timeline.play();
+                        }
+
+                        if (part.contains("=")) {// 赋值操作
+                            String[] assignment = part.split("=");
+                            String varName = assignment[0].trim();
+                            int value = Integer.parseInt(assignment[1].trim());
+                            variables.put(varName, value);
+                        } else if (part.endsWith("++")) {// 自增操作
+                            String varName = part.substring(0, part.length() - 2).trim();
+                            variables.put(varName, variables.getOrDefault(varName, 0) + 1);//读取上一次的值 并加1
+                        } else if (part.endsWith("--")) {// 自减操作
+                            String varName = part.substring(0, part.length() - 2).trim();
+                            variables.put(varName, variables.getOrDefault(varName, 0) - 1);
+                        }
+                    }
+
+                    String result="result: \n";
+                    for (Map.Entry<String, Integer> entry : variables.entrySet()) {
+                        result += entry.getKey() + " = " + entry.getValue();
+                        result += "\n";
+                    }
+
+                    String outFile = file_path.replaceAll("\\.e", "")+".out";//改文件后缀
+                    hashMap.put(outFile,result);
+                    instruction_patch = outFile.split("\\\\");
+                    cmdCreate(instruction_patch,1,false);
                     break;
                 }
                 default:
@@ -669,12 +729,12 @@ public class IndexController {
         stage.show();
     }
 
-    @Resource
-    private CreateProcessController createProcessController;
 
     /**
      * 打开创建进程的窗口
      */
+    @Resource
+    private CreateProcessController createProcessController;
     public void onCreateProcess(MouseEvent mouseEvent) {
         Stage stage = new Stage();
         stage.setScene(createProcessStage.getScene());
@@ -697,6 +757,7 @@ public class IndexController {
             cTime = cpuTimeChoiceBox.getValue();
             log.info("当前时间片为：{}",cTime);
         }
+        timeline.getKeyFrames().addAll(clockRun());
         timeline.play();//开始运行
     }
 

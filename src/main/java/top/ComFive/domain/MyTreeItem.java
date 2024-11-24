@@ -17,7 +17,7 @@ public class MyTreeItem extends TreeItem<String> implements Serializable {
     // 文件名
     private String filename;
     // 文件编号数组
-    private int[] distNumber;//？？？
+    private int[] distNumber;//文件所占用的对应的磁盘下标
 
     // 构造函数
     public MyTreeItem(boolean isDir, String str, int len){//len用来区分是文件/文件夹
