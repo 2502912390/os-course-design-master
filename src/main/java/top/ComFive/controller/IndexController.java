@@ -303,7 +303,7 @@ public class IndexController {
             if(parts.equals("default")){
                 System.out.println("default");
                 // 每两秒创建一个新进程 TODO 在运行文件的时候调用/就绪队列为空的时候调用
-                if(timeNum%2==0){
+                if(timeNum%5==0){
                     Random random = new Random();
                     int i = random.nextInt(3);
                     createProcess( ++auto_add_pid,str.charAt(i)+"",random.nextInt(7)+2 );
@@ -311,7 +311,7 @@ public class IndexController {
             }else{//运行脚本
                 System.out.println("NONONE....");
                 if(!isRun){
-                    createProcess(++auto_add_pid,parts.charAt(1)+"",parts.charAt(2)-'0');
+                    createProcess(++auto_add_pid,parts.charAt(1)+"",Integer.parseInt(parts.substring(2)));
                     isRun=true;
                 }
             }
@@ -656,8 +656,10 @@ public class IndexController {
                         }
 
                         if(part.startsWith("!")){//调用对应的设备
+                            // 每次run一次 系统时间都会加快？？？ 因为play了多次...
                             timeline.getKeyFrames().addAll(clockRun(part));
                             timeline.play();
+                            isRun=false;
                         }
 
                         if (part.contains("=")) {// 赋值操作
@@ -728,7 +730,6 @@ public class IndexController {
         stage.setScene(memoryStage.getScene());
         stage.show();
     }
-
 
     /**
      * 打开创建进程的窗口
