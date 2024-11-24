@@ -502,7 +502,10 @@ public class IndexController {
                     }
                     break;   
                 }
-                case 3:{
+                case 3:{//bug
+                    System.out.println("Before");
+                    System.out.println(hashMap);
+
                     int num=instructionAndpath.length;
                     // 复制文件
                     if(num==2) {
@@ -525,9 +528,11 @@ public class IndexController {
 
                         instruction_patch = newstr.split("\\\\");
 
-                        hashMap.put(target_file_path,hashMap.get(file_path));
+                        hashMap.put(target_file_path+"\\"+file_name,hashMap.get(file_path));
                         cmdCreate(instruction_patch, 1, false);
                     }
+                    System.out.println("After");
+                    System.out.println(hashMap);
                     break;
                 }
                 case 4:{

@@ -67,9 +67,6 @@ public class FileSysHandler {
         int[] t=children.getDistNumber(); //获取文件的编号
         t[t[0]+1]=255;//最后一块设置为255
 
-        System.out.println("t[0]: "+t[0]);//1
-        System.out.println(java.util.Arrays.toString(t));//[1, 255, 0, 0, 0, 0]
-
         int diskLen=fileSysController.diskList.size();//总的磁盘数
         int diskIndex=3;
 
@@ -82,8 +79,7 @@ public class FileSysHandler {
 
         //遍历所有分配的块 更新磁盘表和文件的颜色标识
         for(int i=1;i<=t[0];i++){
-            System.out.println("*****"+t[i]);
-            updateDiskTable(t[i],255);
+            updateDiskTable(t[i],t[i+1]);
             changeColor(t[i],"apply");
         }
     }

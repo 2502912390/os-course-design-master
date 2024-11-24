@@ -56,9 +56,9 @@ public class FileSysController {
         diskTable.setItems(diskList);
 
         // 设置前三个磁盘块为已占用状态
-        diskList.get(0).setNext(255);
+        diskList.get(0).setNext(1);
         diskList.get(1).setNext(255);
-        diskList.get(2).setNext(255);
+        diskList.get(2).setNext(255);//255代码EOF
 
         // 设置第2和第3个矩形(索引1和2)的颜色为绿色，表示已占用
         rectList.get(0).setStyle("-fx-fill: #1eff31;");
