@@ -136,7 +136,9 @@ public class IndexController {
     private Integer cpuTime = 0;// cpu运行时间
     private Integer cTime = 5;//时间片
 
-    private boolean isRun = false;
+
+    private boolean random = false;//随机模式
+    private boolean Timming = false; //标记是否开始了计时 保证timeline.play()只执行一次
 
     //磁盘区域
     @FXML
@@ -269,7 +271,7 @@ public class IndexController {
         
         // 设置时间线
         timeline.setCycleCount(Integer.MAX_VALUE);
-//
+        timeline.getKeyFrames().addAll(clockRun());
         
         // 初始化内存显示
         ObservableList<Node> children = memoryBox.getChildren();
@@ -284,35 +286,25 @@ public class IndexController {
         memoryHandler.apply(memory);
     }
 
-    private KeyFrame clockRun() {
-        // 调用有参数的方法，传入默认值
-        return clockRun("default");
-    }
 
     /** 
      * 时钟帧每秒执行一次
      * 返回一个KeyFrame对象，定义了每秒执行的操作
      */
-    private KeyFrame clockRun(String parts){
+    private KeyFrame clockRun(){
         return new KeyFrame(Duration.seconds(1),"clock",event->{
             // 更新时间和CPU时间
             timeNum++;
             cpuTime++;
             time.setText(timeNum+"");
+            Timming=true;
 
-            if(parts.equals("default")){
-                System.out.println("default");
-                // 每两秒创建一个新进程 TODO 在运行文件的时候调用/就绪队列为空的时候调用
+            if(random){
+                System.out.println("random");
                 if(timeNum%5==0){
                     Random random = new Random();
                     int i = random.nextInt(3);
                     createProcess( ++auto_add_pid,str.charAt(i)+"",random.nextInt(7)+2 );
-                }
-            }else{//运行脚本
-                System.out.println("NONONE....");
-                if(!isRun){
-                    createProcess(++auto_add_pid,parts.charAt(1)+"",Integer.parseInt(parts.substring(2)));
-                    isRun=true;
                 }
             }
 
@@ -657,9 +649,11 @@ public class IndexController {
 
                         if(part.startsWith("!")){//调用对应的设备
                             // 每次run一次 系统时间都会加快？？？ 因为play了多次...
-                            timeline.getKeyFrames().addAll(clockRun(part));
-                            timeline.play();
-                            isRun=false;
+//                            timeline.getKeyFrames().addAll(clockRun(part));
+                            if(!Timming){
+                                timeline.play();
+                            }
+                            createProcess(++auto_add_pid,part.charAt(1)+"",Integer.parseInt(part.substring(2)));
                         }
 
                         if (part.contains("=")) {// 赋值操作
@@ -748,6 +742,7 @@ public class IndexController {
      */
     public void onReset(MouseEvent mouseEvent) {
         // TODO: 实现重置逻辑
+
     }
 
     /**
@@ -758,8 +753,11 @@ public class IndexController {
             cTime = cpuTimeChoiceBox.getValue();
             log.info("当前时间片为：{}",cTime);
         }
-        timeline.getKeyFrames().addAll(clockRun());
-        timeline.play();//开始运行
+        random=true;//开始运行 则是随机模式
+
+        if(!Timming){
+            timeline.play();//开始运行
+        }
     }
 
     /**
