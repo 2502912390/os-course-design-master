@@ -81,7 +81,7 @@ public class MemoryHandler {
                 // 如果内存块未被占用
                 int x = i/20;//行索引
                 int y = i%20;//列索引
-                memories.get(x).getChildren().get(y);
+                memories.get(x).getChildren().get(y);//不进行设置？？？
 
                 // 将该内存块添加到内存对象的列表中
                 memory.getMemoryList().add(i);
@@ -90,8 +90,8 @@ public class MemoryHandler {
                     Findfree=true;
                     break;
                 }
-            }else{//
-                // 保证内存块的连续性，如果遇到已占用的内存块，清空已收集的内存块列表，重新开始搜索
+            }else{//保证内存块的连续性？
+                // 如果遇到已占用的内存块，清空已收集的内存块列表，重新开始搜索
                 memory.getMemoryList().clear();
             }
         }

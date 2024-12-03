@@ -12,6 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
@@ -26,6 +27,7 @@ import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
 import top.ComFive.device.Device;
 import top.ComFive.device.DeviceHandler;
+import top.ComFive.disk.Disk;
 import top.ComFive.domain.MyTreeItem;
 import top.ComFive.filesys.FileSysHandler;
 import top.ComFive.memory.Memory;
@@ -147,8 +149,10 @@ public class IndexController {
     public TextArea console;//控制台显示
     private MyTreeItem root;
     @Resource
+    @FXML
     private FileSysHandler fileSysHandler;
     @Resource
+    @FXML
     private FileSysController fileSysController;
     
     //内存模块
@@ -161,6 +165,21 @@ public class IndexController {
     public Text memoryText;
     @Resource
     private MemoryHandler memoryHandler;
+
+    @FXML
+    public FlowPane rectBox;
+
+    // 观察列表，用于存储磁盘对象
+    @FXML
+    public ObservableList<Disk> diskList = FXCollections.observableArrayList();
+
+    // 文件分配表
+    public TableView<Disk> diskTable;
+    public TableColumn<Disk, IntegerProperty> num;  // 盘号列
+    public TableColumn<Disk, IntegerProperty> next; // 索引列（指向下一个磁盘块）
+
+
+
 
     // 初始化函数，窗口打开后自动执行
     public void initialize() {
@@ -246,6 +265,8 @@ public class IndexController {
         root.getChildren().addAll(G);
 
         //TODO
+
+
         //要添加磁盘占用
 
         console.setText("欢迎使用");
@@ -272,6 +293,49 @@ public class IndexController {
         // 设置时间线
         timeline.setCycleCount(Integer.MAX_VALUE);
         timeline.getKeyFrames().addAll(clockRun());
+
+        /*
+         @FXML
+    public FlowPane rectBox;
+
+    // 观察列表，用于存储磁盘对象
+    @FXML
+    public ObservableList<Disk> diskList = FXCollections.observableArrayList();
+
+    // 文件分配表
+    public TableView<Disk> diskTable;
+    public TableColumn<Disk, IntegerProperty> num;  // 盘号列
+    public TableColumn<Disk, IntegerProperty> next; // 索引列（指向下一个磁盘块）
+        */
+
+
+        // 给每个矩形块(代表磁盘块)命名id,并创建对应的Disk对象
+        ObservableList<Node> rectList = rectBox.getChildren();
+
+        for(int i=0; i<rectList.size(); i++){
+            rectList.get(i).setId("rect"+String.valueOf(i));//为每一个可视化的rect设置一个id
+
+            diskList.add(new Disk(i,i));
+        }
+
+        // 绑定表格列与Disk对象的属性
+        num.setCellValueFactory(new PropertyValueFactory<>("num"));
+        next.setCellValueFactory(new PropertyValueFactory<>("next"));
+
+        // 将diskList设置为表格的数据源
+        diskTable.setItems(diskList);
+
+        // 设置前三个磁盘块为已占用状态
+        diskList.get(0).setNext(1);
+        diskList.get(1).setNext(255);
+        diskList.get(2).setNext(255);//255代码EOF
+
+        // 设置第2和第3个矩形(索引1和2)的颜色为绿色，表示已占用
+        rectList.get(0).setStyle("-fx-fill: #1eff31;");
+        rectList.get(1).setStyle("-fx-fill: #1eff31;");
+        rectList.get(2).setStyle("-fx-fill: #1eff31;");
+
+
         
         // 初始化内存显示
         ObservableList<Node> children = memoryBox.getChildren();
