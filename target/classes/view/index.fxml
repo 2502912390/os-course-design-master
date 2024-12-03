@@ -69,7 +69,7 @@
       <Text layoutX="512.0" layoutY="381.0" strokeType="OUTSIDE" strokeWidth="0.0" text="完成队列" wrappingWidth="75.0" />
       <AnchorPane layoutX="35.0" layoutY="338.0" prefHeight="332.0" prefWidth="422.0" style="-fx-background-color: #ddd;">
          <children>
-            <Text fill="#282626" layoutX="118.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="内存使用情况" />
+            <Text fill="#282626" layoutX="124.0" layoutY="79.0" strokeType="OUTSIDE" strokeWidth="0.0" text="内存使用情况" />
             <AnchorPane fx:id="memoryBox" layoutX="1.0" layoutY="86.0" prefHeight="260.0" prefWidth="436.0">
                <children>
                   <FlowPane layoutX="30.0" layoutY="15.0" prefHeight="27.0" prefWidth="370.0" style="-fx-background-color: #5aF;">
@@ -245,28 +245,28 @@
                </children>
             </AnchorPane>
             <ProgressBar fx:id="memoryBar" layoutX="51.0" layoutY="14.0" prefHeight="40.0" prefWidth="335.0" progress="0.0" />
-            <Text fx:id="memoryText" layoutX="245.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="5%" />
+            <Text fx:id="memoryText" layoutX="264.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="5%" />
          </children>
       </AnchorPane>
       <Text layoutX="1148.0" layoutY="357.0" strokeType="OUTSIDE" strokeWidth="0.0" text="目录树" wrappingWidth="75.00000236928463" />
-      <Text layoutX="1134.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="输入命令" wrappingWidth="79.9999922811985" />
+      <Text layoutX="1158.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="输入命令" wrappingWidth="79.9999922811985" />
       <Button id="start" fx:id="start" layoutX="80.0" layoutY="80.0" mnemonicParsing="false" onMouseClicked="#onStart" text="开始" />
       <Button id="stop" fx:id="stop" layoutX="216.0" layoutY="80.0" mnemonicParsing="false" onMouseClicked="#onStop" text="暂停" />
-      <Label id="time" fx:id="time" alignment="CENTER" contentDisplay="CENTER" layoutX="900.0" layoutY="53.0" prefHeight="90.0" prefWidth="102.0" style="-fx-font-size: 50;" text="0" />
+      <Label id="time" fx:id="time" alignment="CENTER" contentDisplay="CENTER" layoutX="809.0" layoutY="44.0" prefHeight="90.0" prefWidth="102.0" style="-fx-font-size: 50;" text="0" />
       <Button id="create" fx:id="create" layoutX="349.0" layoutY="80.0" mnemonicParsing="false" onMouseClicked="#onCreateProcess" text="新建" />
       <Label layoutX="38.0" layoutY="23.0" prefHeight="24.0" prefWidth="102.0" text="可用内存：" />
       <Text layoutX="152.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="100KB" />
       <Label layoutX="246.0" layoutY="23.0" prefHeight="24.0" prefWidth="115.0" text="可选时长：" />
       <Text layoutX="349.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4、5、6、7" />
       <Label layoutX="477.0" layoutY="23.0" prefHeight="24.0" prefWidth="161.0" text="运行时间片时长：" />
-      <ChoiceBox fx:id="cpuTimeChoiceBox" layoutX="659.0" layoutY="27.0" prefHeight="30.0" prefWidth="75.0" />
-      <TableView fx:id="deviceQueue" layoutX="35.0" layoutY="716.0" prefHeight="260.0" prefWidth="437.0">
+      <ChoiceBox fx:id="cpuTimeChoiceBox" layoutX="627.0" layoutY="29.0" prefHeight="30.0" prefWidth="75.0" />
+      <TableView fx:id="deviceQueue" layoutX="35.0" layoutY="730.0" prefHeight="260.0" prefWidth="437.0">
         <columns>
           <TableColumn fx:id="deviceName" prefWidth="212.99996948242188" text="设备名称" />
           <TableColumn fx:id="deviceOccupyPid" minWidth="1.0" prefWidth="223.0" text="占用进程" />
         </columns>
       </TableView>
-      <Label layoutX="38.0" layoutY="692.0" prefHeight="24.0" prefWidth="102.0" text="设备占用表" textAlignment="CENTER">
+      <Label layoutX="38.0" layoutY="706.0" prefHeight="24.0" prefWidth="102.0" text="设备占用表" textAlignment="CENTER">
          <font>
             <Font size="18.0" />
          </font>
@@ -420,8 +420,8 @@
       </TableView>
       <TextArea id="command" fx:id="console" editable="false" layoutX="1433.0" layoutY="53.0" prefHeight="120.0" prefWidth="233.0" />
       <Text layoutX="1433.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" 终端" wrappingWidth="80.0" />
-      <TextField fx:id="command" layoutX="1134.0" layoutY="53.0" onKeyPressed="#cmd" prefHeight="36.0" prefWidth="277.0" />
+      <TextField fx:id="command" layoutX="1158.0" layoutY="53.0" onKeyPressed="#cmd" prefHeight="36.0" prefWidth="269.0" />
       <TreeView id="treeView" fx:id="treeView" layoutX="1146.0" layoutY="363.0" prefHeight="250.0" prefWidth="404.0" />
-      <Label layoutX="790.0" layoutY="23.0" prefHeight="24.0" prefWidth="161.0" text="运行时间片时长：" />
+      <Label layoutX="750.0" layoutY="23.0" prefHeight="24.0" prefWidth="161.0" text="运行时长：" />
    </children>
 </AnchorPane>
