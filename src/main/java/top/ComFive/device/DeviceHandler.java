@@ -19,6 +19,9 @@ public class DeviceHandler {
     // 存储设备的可观察列表
     private ObservableList<Device> deviceList = FXCollections.observableArrayList();
 
+    // 用于显示设备信息的TableView
+    TableView<Device> tv = null;
+
     /**
      * 构造函数，初始化设备列表
      */
@@ -26,13 +29,21 @@ public class DeviceHandler {
         // 添加一些模拟的设备
         deviceList.addAll(
                 new Device("A"),
-//                new Device("A"),
                 new Device("B"),
                 new Device("B"),
-//                new Device("B"),
                 new Device("C"),
                 new Device("C"));
-//                new Device("C"));
+    }
+
+    /**
+     * 绑定TableView的列与Device对象的属性
+     */
+    public void bindProperties(TableView<Device> tv, TableColumn<Device, IntegerProperty> ocupyDev, TableColumn<Device, StringProperty> type) {
+        ocupyDev.setCellValueFactory(new PropertyValueFactory<>("ocupyPID"));
+        type.setCellValueFactory(new PropertyValueFactory<>("type"));
+
+        tv.setItems(deviceList);
+        this.tv = tv;
     }
 
     /**
@@ -52,20 +63,6 @@ public class DeviceHandler {
         }
         tv.refresh();
         return null;
-    }
-
-    // 用于显示设备信息的TableView
-    TableView<Device> tv = null;
-
-    /**
-     * 绑定TableView的列与Device对象的属性
-     */
-    public void bindProperties(TableView<Device> tv, TableColumn<Device, IntegerProperty> ocupyDev, TableColumn<Device, StringProperty> type) {
-        ocupyDev.setCellValueFactory(new PropertyValueFactory<>("ocupyPID"));
-        type.setCellValueFactory(new PropertyValueFactory<>("type"));
-
-        tv.setItems(deviceList);
-        this.tv = tv;
     }
 
     /**
