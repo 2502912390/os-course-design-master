@@ -47,6 +47,9 @@ public class FileSysHandler {
 
     //设置Disk_id磁盘的下一块指向
     public void updateDiskTable(Integer Disk_id,Integer next){
+        if (Disk_id==0||Disk_id==1||Disk_id==2){//0 1 2不改变索引
+            return;
+        }
         fileSysController.getDiskList().get(Disk_id).setNext(next);
         fileSysController.getDiskTable().refresh();
     }

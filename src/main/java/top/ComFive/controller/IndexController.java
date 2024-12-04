@@ -483,7 +483,7 @@ public class IndexController {
     /**
      * 处理用户输入的命令
      */
-    String[] command_set={"create","delete","rmdir","copy","mkdir","deldir","type","write","run","format","ls"};
+    String[] command_set={"create","delete","rmdir","copy","mkdir","deldir","type","write","run","format","ls","clear"};
     //将磁盘占用操作与hashMap绑定？
     Map<String, String> hashMap = new HashMap<>();//文件名 文件内容
     public void cmd(KeyEvent keyEvent) {
@@ -754,6 +754,10 @@ public class IndexController {
                         MyTreeItem mt=(MyTreeItem) myself.getChildren().get(i);
                         console.setText(console.getText()+"\n"+mt.getFileName());
                     }
+                    break;
+                }
+                case 11:{
+                    console.setText("ClearOK");
                     break;
                 }
                 default:
