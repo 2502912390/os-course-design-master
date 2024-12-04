@@ -181,8 +181,6 @@ public class IndexController {
     public TableColumn<Disk, IntegerProperty> next; // 索引列（指向下一个磁盘块）
 
 
-
-
     // 初始化函数，窗口打开后自动执行
     public void initialize() {
         // 初始化文件系统树结构
@@ -732,10 +730,15 @@ public class IndexController {
                 }
                 case 9:{
                     int fileSize=root.getChildren().size();
+
                     for(int i=0;i<fileSize;i++){
-                        MyTreeItem mt=(MyTreeItem) root.getChildren().get(i);
-                        System.out.println(mt.getFileName());
+                        MyTreeItem mt=(MyTreeItem) root.getChildren().get(0);
                         fileSysHandler.checkDeleteFile(root,mt.getFileName(),2);
+                    }
+
+                    Set<String> set=hashMap.keySet();
+                    for(String s:set){
+                        hashMap.remove(s);
                     }
 
                     break;

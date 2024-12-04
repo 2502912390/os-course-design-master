@@ -35,6 +35,9 @@ public class FileSysHandler {
     private IndexController indexController;
     //根据磁盘下标 改变颜色
     public void changeColor(Integer fid,String appOrfree){
+        if (fid==0||fid==1||fid==2){//0 1 2不改变颜色
+            return;
+        }
         if("apply".equals(appOrfree)){
             lookupById(fid).setStyle("-fx-fill: #676161;");
         }else if("free".equals(appOrfree)){
