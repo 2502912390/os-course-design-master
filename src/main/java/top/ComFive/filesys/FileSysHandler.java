@@ -36,9 +36,9 @@ public class FileSysHandler {
     //根据磁盘下标 改变颜色
     public void changeColor(Integer fid,String appOrfree){
         if("apply".equals(appOrfree)){
-            lookupById(fid).setStyle("-fx-fill: #1eff31;");
+            lookupById(fid).setStyle("-fx-fill: #676161;");
         }else if("free".equals(appOrfree)){
-            lookupById(fid).setStyle("-fx-fill: #00a4fd;");
+            lookupById(fid).setStyle("-fx-fill: #1eff31;");
         }
     }
 
@@ -106,6 +106,7 @@ public class FileSysHandler {
     //检查并删除root下指定的文件或文件夹
     public void checkDeleteFile(MyTreeItem root,String str,int type){//父节点 文件名 类型
         int mtlen=root.getChildren().size();
+
         for(int i=0;i<mtlen;i++){
             MyTreeItem mt=(MyTreeItem) root.getChildren().get(i);
             if(mt.getFileName().equals(str)){
@@ -126,7 +127,6 @@ public class FileSysHandler {
                 else indexController.console.setText(indexController.console.getText()+"\n请输入正确的路径");
             }
         }
-        return;
     }
 
     //递归删除目录及其包含的文件的（主要是释放磁盘块）

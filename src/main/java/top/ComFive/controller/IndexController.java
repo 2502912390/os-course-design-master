@@ -266,11 +266,6 @@ public class IndexController {
         root.getChildren().addAll(F);
         root.getChildren().addAll(G);
 
-        //TODO
-
-
-        //要添加磁盘占用
-
         console.setText("欢迎使用");
         memoryBar.setProgress(0.05);// 设置内存进度条为 5%
 
@@ -488,24 +483,9 @@ public class IndexController {
     }
 
     /**
-     * 内存管理方法（待实现）
-     */
-    private void memory(){
-        // TODO: 实现内存管理逻辑
-    }
-
-    /**
-     * 跳转到帮助界面（待实现）
-     */
-    public void toHelp(MouseEvent mouseEvent) {
-        // TODO: 实现帮助界面跳转逻辑
-    }
-
-    /**
      * 处理用户输入的命令
      */
-    //别的地方是否还有用到？
-    String[] command_set={"create","delete","rmdir","copy","mkdir","deldir","type","write","run"};
+    String[] command_set={"create","delete","rmdir","copy","mkdir","deldir","type","write","run","format","ls"};
     //将磁盘占用操作与hashMap绑定？
     Map<String, String> hashMap = new HashMap<>();//文件名 文件内容
     public void cmd(KeyEvent keyEvent) {
@@ -527,7 +507,7 @@ public class IndexController {
             }
 
             int instruction_patch_num= instruction_patch.length;
-            if(instruction_patch_num<=1){
+            if(instruction_patch_num<1){
                 console.setText(console.getText()+"\n请输入正确的路径1");
                 return;
             }
@@ -568,10 +548,7 @@ public class IndexController {
                     }
                     break;   
                 }
-                case 3:{//bug
-                    System.out.println("Before");
-                    System.out.println(hashMap);
-
+                case 3:{
                     int num=instructionAndpath.length;
                     // 复制文件
                     if(num==2) {
@@ -597,8 +574,8 @@ public class IndexController {
                         hashMap.put(target_file_path+"\\"+file_name,hashMap.get(file_path));
                         cmdCreate(instruction_patch, 1, false);
                     }
-                    System.out.println("After");
-                    System.out.println(hashMap);
+//                    System.out.println("After");
+//                    System.out.println(hashMap);
                     break;
                 }
                 case 4:{
@@ -609,6 +586,7 @@ public class IndexController {
                 case 5:{
                     // 删除目录（包括非空目录）
                     cmdDelete(instruction_patch,2);
+//                    System.out.println(Arrays.toString(instruction_patch));
                     Set<String> set=hashMap.keySet();
                     for(String s:set){
                         if(s.contains(file_path)){
@@ -752,6 +730,29 @@ public class IndexController {
                     cmdCreate(instruction_patch,1,false);
                     break;
                 }
+                case 9:{
+                    int fileSize=root.getChildren().size();
+                    for(int i=0;i<fileSize;i++){
+                        MyTreeItem mt=(MyTreeItem) root.getChildren().get(i);
+                        System.out.println(mt.getFileName());
+                        fileSysHandler.checkDeleteFile(root,mt.getFileName(),2);
+                    }
+
+                    break;
+                }
+                case 10:{
+                    ArrayList<String> list = new ArrayList<>(Arrays.asList(instruction_patch));
+                    list.add("none");
+                    instruction_patch = list.toArray(new String[0]);
+
+                    MyTreeItem myself =fileSysHandler.checkFile(root,instruction_patch,1);
+                    int fileSize=myself.getChildren().size();
+                    for(int i=0;i<fileSize;i++){
+                        MyTreeItem mt=(MyTreeItem) myself.getChildren().get(i);
+                        console.setText(console.getText()+"\n"+mt.getFileName());
+                    }
+                    break;
+                }
                 default:
                     console.setText(console.getText()+"\n输入错误");
             }
@@ -807,14 +808,6 @@ public class IndexController {
         stage.setScene(createProcessStage.getScene());
         createProcessController.setStage(stage);
         stage.show();
-    }
-
-    /**
-     * 重置系统（待实现）
-     */
-    public void onReset(MouseEvent mouseEvent) {
-        // TODO: 实现重置逻辑
-
     }
 
     /**
