@@ -33,12 +33,12 @@ public class MemoryHandler {
             int y = i%20;  // 计算列索引
             if("apply".equals(type)){
                 // 申请内存时，将对应的UI元素设置为红色，并在内存表中标记为已占用
-                memories.get(x).getChildren().get(y).setStyle("-fx-fill: #f25555");//FlowPane对应地方设置为红色
+                memories.get(x).getChildren().get(y).setStyle("-fx-fill: #00bfb2");//FlowPane对应地方设置为红色
                 memoryTable.put(i,true);
             }
             else if("free".equals(type)){
                 // 释放内存时，将对应的UI元素设置为蓝色，并从内存表中移除
-                memories.get(x).getChildren().get(y).setStyle("-fx-fill: #1e90ff");
+                memories.get(x).getChildren().get(y).setStyle("-fx-fill: #87939a");
                 memoryTable.remove(i);
             }
         }
