@@ -166,6 +166,8 @@ public class IndexController {
     @Resource
     private MemoryHandler memoryHandler;
 
+
+
     @FXML
     public FlowPane rectBox;
 
@@ -307,7 +309,7 @@ public class IndexController {
     public TableColumn<Disk, IntegerProperty> num;  // 盘号列
     public TableColumn<Disk, IntegerProperty> next; // 索引列（指向下一个磁盘块）
         */
-
+/*
 
         // 给每个矩形块(代表磁盘块)命名id,并创建对应的Disk对象
         ObservableList<Node> rectList = rectBox.getChildren();
@@ -335,7 +337,7 @@ public class IndexController {
         rectList.get(1).setStyle("-fx-fill: #1eff31;");
         rectList.get(2).setStyle("-fx-fill: #1eff31;");
 
-
+*/
         
         // 初始化内存显示
         ObservableList<Node> children = memoryBox.getChildren();

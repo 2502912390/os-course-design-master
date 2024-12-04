@@ -8,9 +8,10 @@
 <?import javafx.scene.text.Text?>
 
 <!--磁盘显示区域-->
-<AnchorPane prefHeight="450.0" prefWidth="630.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="top.ComFive.controller.FileSysController">
+
+<AnchorPane prefHeight="450.0" prefWidth="979.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="top.ComFive.controller.FileSysController">
    <children>
-      <FlowPane fx:id="rectBox" hgap="9.0" layoutX="53.0" layoutY="75.0" prefHeight="280.0" prefWidth="330.0" vgap="10.0" AnchorPane.bottomAnchor="57.0" AnchorPane.leftAnchor="53.0" AnchorPane.rightAnchor="230.0" AnchorPane.topAnchor="75.0">
+      <FlowPane fx:id="rectBox" hgap="9.0" layoutX="550.0" layoutY="84.0" prefHeight="318.0" prefWidth="350.0" vgap="10.0" AnchorPane.bottomAnchor="48.0" AnchorPane.leftAnchor="550.0" AnchorPane.rightAnchor="79.0" AnchorPane.topAnchor="84.0">
          <children>
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#11ff3b" height="14.0" stroke="BLACK" strokeType="INSIDE" width="23.0" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="14.0" stroke="BLACK" strokeType="INSIDE" width="23.0" />
@@ -142,19 +143,19 @@
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="14.0" stroke="BLACK" strokeType="INSIDE" width="23.0" />
          </children>
       </FlowPane>
-      <Text layoutX="24.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="磁盘" wrappingWidth="44.0" />
-      <Text layoutX="56.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="fat" wrappingWidth="23.000013828277588" />
-      <Text layoutX="91.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="fat" />
+      <Text layoutX="506.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="磁盘" wrappingWidth="44.0" />
+      <Text layoutX="550.0" layoutY="78.0" strokeType="OUTSIDE" strokeWidth="0.0" text="fat" wrappingWidth="23.000013828277588" />
+      <Text layoutX="583.0" layoutY="78.0" strokeType="OUTSIDE" strokeWidth="0.0" text="fat" />
 
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#11ff3b" height="14.0" layoutX="53.0" layoutY="368.0" stroke="BLACK" strokeType="INSIDE" width="23.0" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="14.0" layoutX="141.0" layoutY="368.0" stroke="BLACK" strokeType="INSIDE" width="23.0" />
-      <Text layoutX="78.0" layoutY="381.0" strokeType="OUTSIDE" strokeWidth="0.0" text="已使用" />
-      <Text layoutX="168.0" layoutY="381.0" strokeType="OUTSIDE" strokeWidth="0.0" text="未使用" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#11ff3b" height="14.0" layoutX="620.0" layoutY="406.0" stroke="BLACK" strokeType="INSIDE" width="23.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="14.0" layoutX="747.0" layoutY="406.0" stroke="BLACK" strokeType="INSIDE" width="23.0" />
+      <Text layoutX="643.0" layoutY="420.0" strokeType="OUTSIDE" strokeWidth="0.0" text="已使用" />
+      <Text layoutX="770.0" layoutY="420.0" strokeType="OUTSIDE" strokeWidth="0.0" text="未使用" />
 
-      <TableView fx:id="diskTable" layoutX="410.0" layoutY="23.0" prefHeight="354.0" prefWidth="147.0">
+      <TableView fx:id="diskTable" layoutX="64.0" layoutY="48.0" prefHeight="332.0" prefWidth="358.0">
         <columns>
-          <TableColumn fx:id="num" prefWidth="75.0" text="盘号" />
-          <TableColumn fx:id="next" prefWidth="75.0" text="索引" />
+          <TableColumn fx:id="num" prefWidth="172.0" text="盘号" />
+          <TableColumn fx:id="next" prefWidth="185.0" text="索引" />
         </columns>
       </TableView>
 
